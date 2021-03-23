@@ -2,7 +2,7 @@
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
 import * as cookieParser from 'cookie-parser';
-import * as Controller from '../src/interfaces/controller.interface';
+//import * as Controller from '../src/interfaces/controller.interface';
 import errorMiddleware from '../src/api/middlewares/error.middleware';
 
 

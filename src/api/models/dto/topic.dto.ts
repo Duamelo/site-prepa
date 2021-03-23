@@ -1,7 +1,7 @@
 import { IsString } from 'class-validator';
 
 
-class CreatePostDto {
+class CreateTopicDto {
 
   @IsString()
   public title: string;
@@ -13,4 +13,4 @@ class CreatePostDto {
 
 }
 
-export default CreatePostDto;
+export default CreateTopicDto;

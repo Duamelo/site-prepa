@@ -1,7 +1,7 @@
-interface Post {
+interface Topic {
     author: string;
     content: string;
     title: string;
 }
 
-export default Post;
+export default Topic;

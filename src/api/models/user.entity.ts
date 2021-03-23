@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-import { CreateDateColumn, ManyToMany, ManyToOne, OneToMany } from '../../../node_modules/typeorm/index';
+import { Column, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { CreateDateColumn, ManyToOne, OneToMany } from '../../../node_modules/typeorm/index';
 import Role from '../models/role.entity';
-import Post from './post.entity';
+import Topic from './topic.entity';
+import Comment from './comment.entity';
 
 
 @Entity()
@@ -32,11 +33,20 @@ class User
     @Column()
     public pays: string;
 
+    @CreateDateColumn()
+    public createdDate: Date;
+
+    @UpdateDateColumn()
+    public updatedDate: Date;
+
     @ManyToOne( ()=> Role, (role : Role) => role.roles)
     public role: Role;
 
-    @OneToMany( () => Post, (post: Post) => post.auteur)
-    public posts: Post[];
+    @OneToMany( () => Topic, (topic: Topic) => topic.auteur)
+    public topics: Topic[];
+
+    @OneToMany( () => Comment, (comment: Comment) => comment.auteur)
+    public comments: Comment[];
 }
 
 export default User;

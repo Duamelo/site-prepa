@@ -2,7 +2,7 @@
 import 'dotenv/config';
 import 'reflect-metadata';
 import App from './app';
-import PostsController from './api/Controllers/blog/posts.controller';
+import TopicsController from './api/Controllers/forum/topics.controller';
 import validateEnv from './utils/validateEnv';
 import { createConnection } from 'typeorm';
  
@@ -22,7 +22,7 @@ validateEnv();
     }
     const app = new App([
 
-        new PostsController(),
+        new TopicsController(),
         new AuthenticationController(),
     ]
     );

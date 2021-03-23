@@ -1,6 +1,6 @@
 import { Column , Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { ManyToMany } from '../../../node_modules/typeorm/index';
-import Post from '../models/post.entity';
+import Topic from './topic.entity';
 
 @Entity()
 class Category 
@@ -11,8 +11,8 @@ class Category
     @Column()
     public nom: string;
 
-    @ManyToMany( () => Post, (post: Post) => post.categories)
-    public posts: Post[];
+    @ManyToMany( () => Topic, (topic: Topic) => topic.categories)
+    public topics: Topic[];
 }
 
 export default Category;

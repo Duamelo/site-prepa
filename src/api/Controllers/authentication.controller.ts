@@ -12,10 +12,11 @@ import { getRepository } from 'typeorm';
 import  TokenData  from '../../interfaces/TokenData.interface';
 import  IUser  from '../../interfaces/IUser';
 import  DataStoredInToken  from '../../interfaces/DataStoredInToken.interface';
+import AuthenticationService from '../services/authentication.service';
 
 class AuthenticationController implements Controller 
 {
-
+    public authenticationService = new AuthenticationService();
     public path = '/auth';
     public router = express.Router();
     public userRepository = getRepository(User);
@@ -36,22 +37,17 @@ class AuthenticationController implements Controller
 
     private registration = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const userData: CreateUserDto = request.body;
-        if (
-            await this.userRepository.findOne({email: userData.email})
-        ){
-            next(new UserWithThatEmailAlreadyExistsException(userData.email));
-        }
-        else {
-            const hashedPassword = await bcrypt.hash(userData.mot_de_passe, 10);
-            const user = await this.userRepository.create({
-                ...userData,
-                mot_de_passe: hashedPassword,
-            });
-            user.mot_de_passe = undefined;
-            const tokenData = this.createToken(user);
-            response.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
+        try{
+            const {
+                cookie,
+                user
+            } = await this.authenticationService.registerUser(userData);
+            response.setHeader('Set-Cookie', [cookie]);
             response.send(user);
 
+        }catch(error)
+        {
+            next(error);
         }
 
     }
@@ -85,13 +81,13 @@ class AuthenticationController implements Controller
         response.send(200);
     }
 
-    private  createCookie(tokenData: TokenData)
+    public createCookie(tokenData: TokenData)
     {
         return `Authorization = ${tokenData.token}; HttpOnly; Max-Age = ${tokenData.expiresIn}`;
     }
         
 
-    private createToken(user: IUser): TokenData
+    public createToken(user: IUser): TokenData
     {
         const expiresIn = 60 * 60;
         const secret = process.env.JWT_SECRET;
