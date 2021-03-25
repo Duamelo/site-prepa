@@ -7,13 +7,13 @@ import CreateUserDto from '../models/dto/user.dto';
 import IUser from '../../interfaces/IUser';
 import { getRepository } from 'typeorm';
 import User from '../models/user.entity';
-
+import { getManager } from 'typeorm';
 
 class AuthenticationService
 {
 
     public userRepository =  getRepository(User);
-
+    public userManager = getManager();
     public async registerUser(userData : CreateUserDto)
     {
         if (
@@ -27,6 +27,8 @@ class AuthenticationService
                 ...userData,
                 mot_de_passe: hashedPassword,
             });
+            //await this.userRepository.save(user);
+            await this.userManager.save(user);
             user.mot_de_passe = undefined;
             const tokenData = this.createToken(user);
             const cookie = this.createCookie(tokenData);

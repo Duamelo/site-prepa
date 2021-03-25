@@ -8,7 +8,8 @@ class CreateUserDto
     @IsString()
     public prenom: string;
 
-    @IsDate()
+
+    @IsString()
     public date_naissance: Date;
 
     @IsString()

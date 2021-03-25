@@ -8,7 +8,8 @@ import validationMiddleware from '../../middlewares/validation.middleware';
 import CreateTopicDto from '../../models/dto/topic.dto';
 import Topic from '../../models/topic.entity';
 
-class TopicsController {
+class TopicsController 
+{
     public path = '/topic';
     public router = express.Router();
     private topicRepository = getRepository(Topic);

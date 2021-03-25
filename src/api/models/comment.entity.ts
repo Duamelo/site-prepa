@@ -17,6 +17,9 @@ class Comment
     @Column()
     public message: string;
 
+    @Column()
+    public likes : number;
+
     @ManyToOne( () => User, (auteur: User) => auteur.comments)
     public auteur: User;
 
