@@ -1,5 +1,5 @@
 import authMiddleware from '../../middlewares/auth.middleware';
-import * as express from 'express';
+import * as express from 'express'; 
 import RequestWithUser from 'interfaces/requestWithUser.interface';
 import { getRepository } from 'typeorm';
 import TopicNotFoundException from '../../exceptions/TopicNotFoundException';
@@ -7,14 +7,14 @@ import TopicNotFoundException from '../../exceptions/TopicNotFoundException';
 import validationMiddleware from '../../middlewares/validation.middleware';
 import CreateTopicDto from '../../models/dto/topic.dto';
 import Topic from '../../models/topic.entity';
+import Comment from '../../models/comment.entity';
 
 class TopicsController 
 {
     public path = '/topic';
     public router = express.Router();
     private topicRepository = getRepository(Topic);
-
-
+     
     constructor(){
         this.initializeRoutes();
     }
@@ -25,6 +25,7 @@ class TopicsController
         //this.router.post(this.path, validationMiddleware(CreatePostDto), this.createPost);
         this.router.get(this.path, this.getAllTopics);
         this.router.get(`${this.path}/:id`, this.getTopicById);
+        this.router.get(`${this.path}/comment:id`, this.getAllCommentByTopicId)
         this.router
             .all(`${this.path}/*`, authMiddleware)
             .patch(`${this.path}/:id`, validationMiddleware(CreateTopicDto, true), this.modifyTopic)
@@ -34,11 +35,17 @@ class TopicsController
     }
 
 
+    private getAllCommentByTopicId = async (request: express.Request, response: express.Response) => {
+        const id = request.params.id;
+        const comments = await this.topicRepository.find({ relations: ["comments"]});
+
+        response.send(comments);  
+    }
     private createTopic = async (request: RequestWithUser, response: express.Response) => {
         const TopicData: CreateTopicDto = request.body;
         const newTopic = this.topicRepository.create({
             ...TopicData,
-           // auteur: request.user,
+            user: request.user,
         });
         //const savedPost = await getRepository(newPost).save();
 

@@ -12,9 +12,10 @@ import Comment from '../../models/user.entity';
 import User from '../../models/user.entity';
 import RequestWithTopic from '../../../interfaces/requestWithTopic.interface';
 import RequestWithComment from 'interfaces/requestWithComment.interface';
+import RequestWithUserAndTopic from 'interfaces/requestWithUserAndTopic.interface';
 
 
-class CommentController
+class CommentsController
 {
     public path = '/comment';
     public router = express.Router();
@@ -29,18 +30,21 @@ class CommentController
 
     private initializeRoutes()
     {
-        this.router.get(this.path, this.getAllCommentsByIdTopic);
+        this.router.get(this.path , this.getAllComments);
         this.router
             .all(`${this.path}/*`, authMiddleware)
-            .post(this.path, authMiddleware, validationMiddleware(CreateCommentDto), this.createComment);
+            .post(this.path, authMiddleware, validationMiddleware(CreateCommentDto), this.createComment)
+            .delete(`${this.path}/:id`, this.deleteCommentById)
+            .patch(`${this.path}/:id`, validationMiddleware(CreateCommentDto, true), this.modifyComments);
+
     }
 
 
 
 
-    private getAllCommentsByIdTopic = async (request: express.Request, response: express.Response, next: express.NextFunction ) => {
-        const id = request.params.id;
-        const comments = await this.commentRepository.query(`select * from comment where topicId = ${id}`);
+    private getAllComments = async (request: express.Request, response: express.Response, next: express.NextFunction ) => {
+
+        const comments = await this.commentRepository.find({ relations : ["comments"]});
 
         response.send(comments);    
    
@@ -50,10 +54,30 @@ class CommentController
 
 
 
-    private createComment = async (request: RequestWithComment, response: express.Response) => {
+    private createComment = async (request: RequestWithUserAndTopic, response: express.Response) => {
+
+        const CommentData: CreateCommentDto = request.body;
+        const newComment = this.commentRepository.create({
+            ...CommentData,
+        });
+
+        await this.commentRepository.save(newComment);
+        response.send(newComment);
+
+    }
+
+
+    private deleteCommentById = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+
+    }
+
+
+    private modifyComments = async ( request: express.Request, response: express.Response, next: express.NextFunction) => {
 
     }
 
 
 
 }
+
+export default CommentsController;

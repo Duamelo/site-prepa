@@ -7,14 +7,14 @@ import User from '../models/user.entity';
 class Role
 {
     @PrimaryGeneratedColumn()
-    public id: number;
+    id: number;
 
 
     @Column()
-    public nom_role: string;
+    nom_role: string;
 
     @OneToMany( ()=> User, (user: User) => user.role)
-    public roles: Role[];
+    roles: Role[];
 
 }
 

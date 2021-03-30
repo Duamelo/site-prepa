@@ -42,10 +42,10 @@ class User
     @ManyToOne( ()=> Role, (role : Role) => role.roles)
     public role: Role;
 
-    @OneToMany( () => Topic, (topic: Topic) => topic.auteur)
+    @OneToMany( () => Topic, (topic: Topic) => topic.user)
     public topics: Topic[];
 
-    @OneToMany( () => Comment, (comment: Comment) => comment.auteur)
+    @OneToMany( () => Comment, (comment: Comment) => comment.userId)
     public comments: Comment[];
 }
 

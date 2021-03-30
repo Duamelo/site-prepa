@@ -5,7 +5,13 @@ class CreateCommentDto
 {
 
 
+  @IsNumber()
+  public userId: number;
 
+  @IsNumber()
+  public topicId: number;
+
+  
   @IsString()
   public message: string;
 
