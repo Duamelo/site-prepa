@@ -10,16 +10,15 @@ class User
 {
     @PrimaryGeneratedColumn()
     public id: number;
-
-
+    
     @Column()
     public nom: string;
 
     @Column()
     public prenom: string;
 
-    @CreateDateColumn()
-    public date_naissance: Date;
+    @Column()
+    public date_naissance: string;
 
     @Column()
     public mot_de_passe: string;
