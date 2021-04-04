@@ -10,7 +10,7 @@ class CreateUserDto
 
 
     @IsString()
-    public date_naissance: Date;
+    public date_naissance: string;
 
     @IsString()
     public email: string;

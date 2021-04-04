@@ -64,7 +64,7 @@ class AuthenticationController implements Controller
                 user.mot_de_passe = undefined;
                 const tokenData = this.createToken(user);
                 response.setHeader('Set-Cookie', [this.createCookie(tokenData)]);
-                response.send(user);
+                response.status(200).send(`${user.nom} ${user.prenom}   is logged`);
             }
             else
             {

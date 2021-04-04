@@ -9,6 +9,7 @@ import { createConnection } from 'typeorm';
 import config from './ormconfig';
 import AuthenticationController from '../src/api/Controllers/authentication.controller';
 import CommentsController from './api/Controllers/forum/comments.controller';
+import UserController from './api/Controllers/user.controller';
 
 
 
@@ -26,6 +27,7 @@ validateEnv();
         new TopicsController(),
         new AuthenticationController(),
         new CommentsController(),
+        new UserController()
     ]
     );
     

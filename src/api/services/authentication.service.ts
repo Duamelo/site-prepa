@@ -29,7 +29,7 @@ class AuthenticationService
             });
             //await this.userRepository.save(user);
             await this.userManager.save(user);
-            user.mot_de_passe = undefined;
+            // user.mot_de_passe = undefined;
             const tokenData = this.createToken(user);
             const cookie = this.createCookie(tokenData);
 
