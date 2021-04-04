@@ -1,7 +1,7 @@
 
 interface IUser 
 {
-    id?: number;
+    id: string;
     nom: string;
     prenom: string;
     date_naissance: string;

@@ -9,7 +9,7 @@ import Comment from './comment.entity';
 class User
 {
     @PrimaryGeneratedColumn()
-    public id: number;
+    public id?: string;
     
     @Column()
     public nom: string;

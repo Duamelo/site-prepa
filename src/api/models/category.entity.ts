@@ -16,11 +16,4 @@ class Category
     topics: Topic[];
 }
 
-export const category1 = new Category();
-category1.nom = "animals";
-
-export const category2 = new Category();
-category2.nom = "zoo";
-
-
 export default Category;

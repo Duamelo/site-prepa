@@ -3,7 +3,7 @@ import { CreateDateColumn, DeleteDateColumn, JoinTable, ManyToMany,ManyToOne, On
 import Category from "./category.entity";
 import User from './user.entity';
 import Comment from './comment.entity';
-import {category1, category2 } from './category.entity';
+import { type } from 'node:os';
 
 
 @Entity()
@@ -27,7 +27,10 @@ class Topic {
     @DeleteDateColumn()
     deletedDate: Date;
 
-    @Column()
+    @Column({
+        type : "int",
+        default : 0
+    })
     likes: number;
     
     @ManyToMany( () => Category, (category: Category ) => category.topics)
@@ -41,11 +44,5 @@ class Topic {
     comments: Comment[];
 
 }
-
-export const topic1 = new Topic();
-topic1.content = "azertyui";
-topic1.title = "scvbn";
-topic1.likes = 0;
-topic1.categories = [category1, category2];
 
 export default Topic;

@@ -8,12 +8,14 @@ import validationMiddleware from '../../middlewares/validation.middleware';
 import CreateTopicDto from '../../models/dto/topic.dto';
 import Topic from '../../models/topic.entity';
 import Comment from '../../models/comment.entity';
+import {getManager} from 'typeorm';
 
 class TopicsController 
 {
     public path = '/topic';
     public router = express.Router();
     private topicRepository = getRepository(Topic);
+    private topicManager = getManager();
      
     constructor(){
         this.initializeRoutes();
@@ -30,7 +32,7 @@ class TopicsController
             .all(`${this.path}/*`, authMiddleware)
             .patch(`${this.path}/:id`, validationMiddleware(CreateTopicDto, true), this.modifyTopic)
             .delete(`${this.path}/:id`, this.deleteTopic)
-            .post(this.path, authMiddleware, validationMiddleware(CreateTopicDto), this.createTopic);
+            .post(this.path,authMiddleware, validationMiddleware(CreateTopicDto), this.createTopic);
 
     }
 
@@ -41,16 +43,17 @@ class TopicsController
 
         response.send(comments);  
     }
+    
     private createTopic = async (request: RequestWithUser, response: express.Response) => {
         const TopicData: CreateTopicDto = request.body;
         const newTopic = this.topicRepository.create({
             ...TopicData,
             user: request.user,
         });
-        //const savedPost = await getRepository(newPost).save();
+        const savedTopic = await this.topicManager.save(newTopic);
 
         //await this.postRepository.save(newPost);
-        response.send(newTopic);
+        response.send(savedTopic);
     }
 
     private getAllTopics = async (request: express.Request, response: express.Response) => {
@@ -92,16 +95,14 @@ class TopicsController
 
     private deleteTopic = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const id = request.params.id;
-        const deleteResponse = await this.topicRepository.delete(id);
-        if(deleteResponse.raw[1])
-        {
-            response.send(200);
-        }
-        else
-        {
-            next(new TopicNotFoundException(id));
 
+        try{
+            const deleteResponse = await this.topicRepository.delete(id);
+            response.status(200).send(`Topic with id ${id} deleted`);
+        }catch(e){
+            next(new TopicNotFoundException(id));
         }
+
     }
   
 }
