@@ -8,13 +8,15 @@ import IUser from '../../interfaces/IUser';
 import { getRepository } from 'typeorm';
 import User from '../models/user.entity';
 import { getManager } from 'typeorm';
+import CreateRegisterDto from '../models/dto/register.dto';
+
 
 class AuthenticationService
 {
 
     public userRepository =  getRepository(User);
     public userManager = getManager();
-    public async registerUser(userData : CreateUserDto)
+    public async registerUser(userData : CreateRegisterDto)
     {
         if (
             await this.userRepository.findOne({email: userData.email})

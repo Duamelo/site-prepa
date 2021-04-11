@@ -13,6 +13,7 @@ import  TokenData  from '../../interfaces/TokenData.interface';
 import  IUser  from '../../interfaces/IUser';
 import  DataStoredInToken  from '../../interfaces/DataStoredInToken.interface';
 import AuthenticationService from '../services/authentication.service';
+import CreateRegisterDto from '../models/dto/register.dto';
 
 class AuthenticationController implements Controller 
 {
@@ -29,14 +30,14 @@ class AuthenticationController implements Controller
 
     private initializeRoutes()
     {
-        this.router.post( `${this.path}/register`, validationMiddleware(CreateUserDto), this.registration);
+        this.router.post( `${this.path}/register`, validationMiddleware(CreateRegisterDto), this.registration);
         this.router.post(`${this.path}/login`, validationMiddleware(LogInDto), this.loggingIn);
         this.router.post(`${this.path}/logout`, this.loggingOut);
     }
 
 
     private registration = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
-        const userData: CreateUserDto = request.body;
+        const userData: CreateRegisterDto = request.body;
         try{
             const {
                 cookie,

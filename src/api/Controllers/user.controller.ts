@@ -21,7 +21,7 @@ class UsersController {
         this.router.get(this.path, this.getAllUsers);
         this.router.get(`${this.path}/:id`, this.getUsersById);
         this.router
-            .all(`${this.path}/*`, authMiddleware)
+            .all(`${this.path}/*`)
             .patch(`${this.path}/:id`, validationMiddleware(CreateUserDto, true), this.modifyUsers)
             .delete(`${this.path}/:id`, this.deleteUser);
     }
