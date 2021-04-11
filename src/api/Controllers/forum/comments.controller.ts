@@ -56,13 +56,13 @@ class CommentsController
 
     private createComment = async (request: RequestWithUserAndTopic, response: express.Response) => {
 
-        const CommentData: CreateCommentDto = request.body;
-        const newComment = this.commentRepository.create({
-            ...CommentData,
-        });
+        // const CommentData: CreateCommentDto = request.body;
+        // const newComment = this.commentRepository.create({
+        //     ...CommentData,
+        // });
 
-        await this.commentRepository.save(newComment);
-        response.send(newComment);
+        // await this.commentRepository.save(newComment);
+        // response.send(newComment);
 
     }
 

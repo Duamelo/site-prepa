@@ -1,10 +1,10 @@
 import { Request } from 'express';
-import IUser from '../interfaces/IUser';
+import User from '../api/models/user.entity';
 
 
 interface RequestWithUser extends Request 
 {
-    user: IUser;
+    user: User;
 }
 
 export default RequestWithUser;

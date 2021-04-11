@@ -49,7 +49,7 @@ class AuthenticationService
     }
         
 
-    public createToken(user: IUser): TokenData
+    public createToken(user: User): TokenData
     {
         const expiresIn = 60 * 60;
         const secret = process.env.JWT_SECRET;
