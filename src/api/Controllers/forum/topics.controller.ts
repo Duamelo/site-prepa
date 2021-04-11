@@ -51,8 +51,6 @@ class TopicsController
             user: request.user,
         });
         const savedTopic = await this.topicManager.save(newTopic);
-
-        //await this.postRepository.save(newPost);
         response.send(savedTopic);
     }
 

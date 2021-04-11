@@ -1,6 +1,6 @@
-import { IsString, IsDate, IsNumber } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 
-class CreateUserDto
+class RegisterDto
 {
     @IsString()
     public nom: string;
@@ -24,9 +24,9 @@ class CreateUserDto
     @IsString()
     public mot_de_passe: string;
 
-    // @IsNumber()
-    // public role: number;
+    @IsNumber()
+    public role: number;
 
 }
 
-export default CreateUserDto;
+export default RegisterDto;
