@@ -1,4 +1,4 @@
-import { Column , Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column , Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { ManyToMany } from '../../../node_modules/typeorm/index';
 import Topic from './topic.entity';
 import { getRepository}  from 'typeorm';
@@ -12,7 +12,7 @@ class Category
     @Column()
     nom: string;
 
-    @ManyToMany( () => Topic, (topic: Topic) => topic.categories)
+    @OneToMany( () => Topic, (topic: Topic) => topic.categories)
     topics: Topic[];
 }
 

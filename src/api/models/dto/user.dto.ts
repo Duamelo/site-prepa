@@ -24,9 +24,6 @@ class CreateUserDto
     @IsString()
     public mot_de_passe: string;
 
-    // @IsNumber()
-    // public role: number;
-
 }
 
 export default CreateUserDto;

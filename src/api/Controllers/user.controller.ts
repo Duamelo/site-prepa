@@ -18,7 +18,7 @@ class UsersController {
     }
 
     public initializeRoutes(){
-        this.router.get(this.path, this.getAllUsers);
+        this.router.get(this.path, authMiddleware, this.getAllUsers);
         this.router.get(`${this.path}/:id`, this.getUsersById);
         this.router
             .all(`${this.path}/*`)
@@ -48,7 +48,7 @@ class UsersController {
     }
     public modifyUsers = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const id = request.params.id;
-        const usersData: User = request.body;
+        const usersData: CreateUserDto = request.body;
 
         await this.usersRepository.update(id, usersData);
 
@@ -61,6 +61,7 @@ class UsersController {
         {
             next(new UserNotFoundException(id));
         }
+
     }
 
     public deleteUser = async (request: express.Request, response: express.Response, next: express.NextFunction) => {

@@ -6,6 +6,7 @@ import User from '../models/user.entity';
 import * as express from 'express';
 import RequestWithUser from '../../interfaces/requestWithUser.interface';
 import { getManager, getRepository } from 'typeorm';
+import RoleNotFoundException from '../exceptions/RoleNotFoundException'
 
 class RoleController{
     public path = '/role';
@@ -19,52 +20,48 @@ class RoleController{
     }
 
     private initializeRoutes(){
-        this.router.get(`${this.path}/:id`, this.getUserRole);
         this.router.post(`${this.path}`, this.createRole);
-        this.router.patch(`${this.path}`, this.updateRole)
+        this.router.patch(`${this.path}/:id`, this.updateRole);
+        this.router.delete(`${this.path}/:id`, this.deleteRole);
+    }
+
+    private deleteRole = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
+        const id = request.params.id;
+
+        try{
+            const deleteResponse = await this.roleRepository.delete(id);
+            response.status(200).send(`Role with id ${id} deleted`);
+        }catch(e){
+            next(new RoleNotFoundException(id));
+        }
+
     }
 
     private updateRole = async (request : RequestWithUser, response : express.Response, next : express.NextFunction) =>{
-        // Cela revient a modifier un User 
-    }
-
-    private  getUserRole = async (request : RequestWithUser, response : express.Response, next : express.NextFunction) =>{
-        
-        //on va tester qu'il s'agit de l'admin
-        
-
-        
-        //fin du test
-        
         const id = request.params.id;
+        const roleData : CreateRoleDto = request.body;
+        await this.roleRepository.update(id, roleData);
+        const role = await this.roleRepository.findOne(id);
 
-        const user = await this.userRepository.findOne(id);
-
-        console.log(user);
-
-        const roleUser = user.role;
-
-        
-
-        if(roleUser){
-            response.send(roleUser);
+        if (role) {
+            response.json(role)
         }else{
-            next(new UserNotFoundException(id));
+            next(new RoleNotFoundException(id))
         }
     }
 
-    private createRole = async (request : RequestWithUser, response : express.Response, next : express.NextFunction)=>{
-        //on va tester qu'il s'agit de l'admin
-        
 
-        
-        //fin du test
-        const RoleData: CreateRoleDto = request.body;
-        const newRole = await this.roleRepository.create({
-            ...RoleData
-        });
-        const saveRole = await this.roleManager.save(newRole);
-        response.send(saveRole);
+    private createRole = async (request : RequestWithUser, response : express.Response, next : express.NextFunction)=>{
+        try{
+            const RoleData: CreateRoleDto = request.body;
+            const newRole = await this.roleRepository.create({
+                ...RoleData
+            });
+            const saveRole = await this.roleManager.save(newRole);
+            response.send(saveRole);
+        } catch(err){
+            response.json(err);
+        }
     }
 }
 

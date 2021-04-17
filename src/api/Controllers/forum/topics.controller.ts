@@ -32,7 +32,7 @@ class TopicsController
             .all(`${this.path}/*`, authMiddleware)
             .patch(`${this.path}/:id`, validationMiddleware(CreateTopicDto, true), this.modifyTopic)
             .delete(`${this.path}/:id`, this.deleteTopic)
-            .post(this.path,authMiddleware, validationMiddleware(CreateTopicDto), this.createTopic);
+            .post(`${this.path}/:idCategory`,authMiddleware, validationMiddleware(CreateTopicDto), this.createTopic);
 
     }
 
@@ -45,10 +45,15 @@ class TopicsController
     }
     
     private createTopic = async (request: RequestWithUser, response: express.Response) => {
+        const id = parseInt(request.params.idCategory);
+        
         const TopicData: CreateTopicDto = request.body;
         const newTopic = this.topicRepository.create({
             ...TopicData,
             user: request.user,
+            categories : {
+                id
+            }
         });
         const savedTopic = await this.topicManager.save(newTopic);
         response.send(savedTopic);
@@ -78,11 +83,12 @@ class TopicsController
 
     private modifyTopic = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const id = request.params.id;
-        const topicData: Topic = request.body;
-        await this.topicRepository.update(id, topicData);
+        const topicData: CreateTopicDto = request.body;
+        
         const updateTopic = await this.topicRepository.findOne(id);
         if(updateTopic)
         {
+            await this.topicRepository.update(id, topicData);
             response.send(updateTopic);
         }
         else 
