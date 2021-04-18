@@ -28,6 +28,15 @@ class CategoriesController{
 
     }
 
+    private createCategory = async (request: express.Request, response: express.Response) => {
+        const CategoryData: CreateCategoryDto = request.body;
+        const newCategory = this.categorieRepository.create({
+            ...CategoryData
+        });
+        const savedCategory = await this.categorieManager.save(newCategory);
+        response.send(savedCategory);
+    }
+
     private getAllCategories = async (request: express.Request, response: express.Response)=>{
         const category = await this.categorieRepository.find();
 

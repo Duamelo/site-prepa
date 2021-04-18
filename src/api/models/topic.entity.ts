@@ -33,9 +33,8 @@ class Topic {
     })
     likes: number;
     
-    @ManyToMany( () => Category, (category: Category ) => category.topics)
-    @JoinTable()
-    categories: Category[];
+    @ManyToOne( () => Category, (category: Category ) => category.topics)
+    categories: Category;
     
     @ManyToOne( () => User, (user: User) => user.topics)
     user: User;

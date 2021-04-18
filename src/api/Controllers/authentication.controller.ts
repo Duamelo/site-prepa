@@ -13,7 +13,7 @@ import  TokenData  from '../../interfaces/TokenData.interface';
 import  IUser  from '../../interfaces/IUser';
 import  DataStoredInToken  from '../../interfaces/DataStoredInToken.interface';
 import AuthenticationService from '../services/authentication.service';
-import CreateRegisterDto from '../models/dto/register.dto';
+// import CreateRegisterDto from '../models/dto/register.dto';
 
 class AuthenticationController implements Controller 
 {
@@ -30,19 +30,19 @@ class AuthenticationController implements Controller
 
     private initializeRoutes()
     {
-        this.router.post( `${this.path}/register`, validationMiddleware(CreateRegisterDto), this.registration);
+        this.router.post( `${this.path}/register/:role`, validationMiddleware(CreateUserDto), this.registration);
         this.router.post(`${this.path}/login`, validationMiddleware(LogInDto), this.loggingIn);
         this.router.post(`${this.path}/logout`, this.loggingOut);
     }
 
 
     private registration = async (request: express.Request, response: express.Response, next: express.NextFunction) => {
-        const userData: CreateRegisterDto = request.body;
+        const userData: CreateUserDto = request.body;
         try{
             const {
                 cookie,
                 user
-            } = await this.authenticationService.registerUser(userData);
+            } = await this.authenticationService.registerUser(userData, request.params.role);
             response.setHeader('Set-Cookie', [cookie]);
             response.send(user);
 

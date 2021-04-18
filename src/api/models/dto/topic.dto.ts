@@ -8,9 +8,7 @@ class CreateTopicDto {
 
   @IsString()
   public content: string;
-
-
-
+  
 }
 
 export default CreateTopicDto;

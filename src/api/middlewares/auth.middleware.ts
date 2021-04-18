@@ -10,6 +10,7 @@ import { getRepository } from 'typeorm';
 
 async function authMiddleware(request: RequestWithUser, response: Response, next: NextFunction)
 {
+    console.log(request.cookies)
     const cookies = request.cookies;
     if (cookies && cookies.Authorization)
     {
@@ -36,8 +37,10 @@ async function authMiddleware(request: RequestWithUser, response: Response, next
         }
         
     }
-    else
-    next(new AuthenticationTokenMissingException());
+    else{
+        next(new AuthenticationTokenMissingException());
+
+    }
 }
 
 

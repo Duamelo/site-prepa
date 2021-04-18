@@ -8,7 +8,7 @@ import IUser from '../../interfaces/IUser';
 import { getRepository } from 'typeorm';
 import User from '../models/user.entity';
 import { getManager } from 'typeorm';
-import CreateRegisterDto from '../models/dto/register.dto';
+// import CreateRegisterDto from '../models/dto/register.dto';
 
 
 class AuthenticationService
@@ -16,7 +16,7 @@ class AuthenticationService
 
     public userRepository =  getRepository(User);
     public userManager = getManager();
-    public async registerUser(userData : CreateRegisterDto)
+    public async registerUser(userData : CreateUserDto, role)
     {
         if (
             await this.userRepository.findOne({email: userData.email})
@@ -28,6 +28,9 @@ class AuthenticationService
             const user = await this.userRepository.create({
                 ...userData,
                 mot_de_passe: hashedPassword,
+                role : {
+                    id : role
+                }
             });
             //await this.userRepository.save(user);
             await this.userManager.save(user);
